@@ -59,4 +59,13 @@ public class Asset {
             return new Asset(this);
         }
     }
+
+// Static helper function to create Asset from File
+    public static Asset fromFile(File file) {
+        return new Builder()
+                .setName(file.getName())
+                .setPath(file.getAbsolutePath())
+                .setDate(new Date(file.lastModified()))
+                .build();
+    }
 }
