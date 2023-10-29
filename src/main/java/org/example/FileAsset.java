@@ -1,16 +1,15 @@
-
 import java.util.Date;
 
 public class Asset {
-    private String name;
-    private String path;
-    private Date date;
+    private final String name;
+    private final String path;
+    private final Date date;
 
-    // Constructor
-    public Asset(String name, String path, Date date) {
-        this.name = name;
-        this.path = path;
-        this.date = date;
+    // Private constructor
+    private Asset(Builder builder) {
+        this.name = builder.name;
+        this.path = builder.path;
+        this.date = builder.date;
     }
 
     // Getters
@@ -26,19 +25,6 @@ public class Asset {
         return date;
     }
 
-    // Setters
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
     @Override
     public String toString() {
         return "Asset{" +
@@ -46,5 +32,31 @@ public class Asset {
                 ", path='" + path + '\'' +
                 ", date=" + date +
                 '}';
+    }
+
+    // Static Builder class
+    public static class Builder {
+        private String name;
+        private String path;
+        private Date date;
+
+        public Builder setName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder setPath(String path) {
+            this.path = path;
+            return this;
+        }
+
+        public Builder setDate(Date date) {
+            this.date = date;
+            return this;
+        }
+
+        public Asset build() {
+            return new Asset(this);
+        }
     }
 }
