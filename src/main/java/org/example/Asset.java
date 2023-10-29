@@ -1,3 +1,6 @@
+package org.example;
+
+import java.io.File;
 import java.util.Date;
 
 public class Asset {
@@ -60,7 +63,12 @@ public class Asset {
         }
     }
 
-// Static helper function to create Asset from File
+    // Public function to return a File from the path
+    public File getFileFromPath() {
+        return new File(path);
+    }
+
+    // Static helper function to create Asset from File
     public static Asset fromFile(File file) {
         return new Builder()
                 .setName(file.getName())
