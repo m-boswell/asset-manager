@@ -1,7 +1,9 @@
 package org.example;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Asset {
     private final String name;
@@ -26,6 +28,10 @@ public class Asset {
 
     public Date getDate() {
         return date;
+    }
+
+    public boolean isVideo() {
+        return this.name.endsWith(".mp4");
     }
 
     @Override
@@ -75,5 +81,18 @@ public class Asset {
                 .setPath(file.getAbsolutePath())
                 .setDate(new Date(file.lastModified()))
                 .build();
+    }
+
+    /**
+     * Static helper function to create a list of Assets from a list of Files
+     * @param files - the list of files
+     * @return a list of assets
+     */
+    public static List<Asset> fromFiles(List<File> files) {
+        List<Asset> assets = new ArrayList<>();
+        for (File file : files) {
+            assets.add(Asset.fromFile(file));
+        }
+        return assets;
     }
 }
