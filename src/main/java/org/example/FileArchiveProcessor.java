@@ -1,29 +1,12 @@
 package org.example;
 
 import java.io.File;
-import java.util.Date;
 
-public class FileDateArchiveProcessor {
+public class FileArchiveProcessor {
     String archivePath;
-    public FileDateArchiveProcessor(String archivePath) {
+    public FileArchiveProcessor(String archivePath) {
         this.archivePath = archivePath;
     }
-    public void process(Asset asset) {
-        Date date = asset.getDate();
-        String path = asset.getPath();
-        // check archive directory if it has a directory for the fileDate year and month. If the date is 2023-10-11 the path should be archive/2023/2023-10
-        String archivePath = this.archivePath;
-        String archiveYearPath = archivePath + "/" + date.getYear();
-        String archiveMonthPath = archiveYearPath + "/" + date.getMonth();
-        this.createArchiveYearDirectoryIfItDoesNotExist(archiveYearPath);
-        this.createArchiveMonthDirectoryIfItDoesNotExist(archiveMonthPath);
-        // get file from path
-        File file = Asset.toFile(asset);
-        // move file to archive directory
-        String archiveFilePath = archiveMonthPath + "/" + file.getName();
-        Utils.moveFile(path, archiveFilePath);
-    }
-
     /**
      * Create archive year directory if it does not exist
      *

@@ -69,9 +69,8 @@ public class Asset {
         }
     }
 
-    // Public function to return a File from the path
-    public File getFileFromPath() {
-        return new File(path);
+    public static File toFile(Asset asset) {
+        return new File(asset.getPath());
     }
 
     // Static helper function to create Asset from File
