@@ -4,11 +4,11 @@ import java.io.File;
 import java.util.Date;
 
 public class FileDatePrefixProcessor {
-    private final DatePrefix datePrefix;
+    private final TimeStampPrefix timeStampPrefix;
     public FileDatePrefixProcessor() {
         // Define a regular expression pattern for ISO 8601 timestamp prefix. Instead of colons this ISO 8601 variant uses dots.
         String isoTimestampPatternForRegexCheck = "^\\d{4}-\\d{2}-\\d{2}T\\d{2}\\.\\d{2}\\.\\d{2}(\\.\\d{3})?";
-        datePrefix = new DatePrefix("yyyy-MM-dd'T'HH.mm.ss", isoTimestampPatternForRegexCheck, " ");
+        timeStampPrefix = new TimeStampPrefix("yyyy-MM-dd'T'HH.mm.ss", isoTimestampPatternForRegexCheck, " ");
     }
 
     /**
@@ -19,7 +19,7 @@ public class FileDatePrefixProcessor {
     public Asset process(Asset asset) {
         File file = Asset.toFile(asset);
         String fileName = file.getName();
-        if (datePrefix.isStringPrefixed(fileName)) {
+        if (timeStampPrefix.isStringPrefixed(fileName)) {
             return asset;
         }
         Date date = new Date(file.lastModified());
@@ -48,7 +48,7 @@ public class FileDatePrefixProcessor {
      * @return the prefixed file name
      */
     private String getFileNameWithPrefixedDate(File file, Date date) {
-        return datePrefix.prefixStringWithDateFormat(file.getName(), date);
+        return timeStampPrefix.prefixStringWithDateFormat(file.getName(), date);
     }
 
     /**
@@ -105,7 +105,7 @@ public class FileDatePrefixProcessor {
 //        String fileName = file.getName();
 //        Date date;
 //
-//        if (datePrefix.isStringPrefixed(fileName)) {
+//        if (timeStampPrefix.isStringPrefixed(fileName)) {
 //            return "The file '" + fileName + "' will not be modified.";
 //        } else if (Utils.isStringContainingDateExpression(fileName)) {
 //            date = Utils.convertStringToDate(fileName);
@@ -113,7 +113,7 @@ public class FileDatePrefixProcessor {
 //            date = new Date(file.lastModified());
 //        }
 //
-//        return "The file '" + fileName + "' will be prefixed with the date: " + DatePrefix.format(date) + "so the new file name will be: " + date + " " + fileName;
+//        return "The file '" + fileName + "' will be prefixed with the date: " + TimeStampPrefix.format(date) + "so the new file name will be: " + date + " " + fileName;
 //    }
 
 

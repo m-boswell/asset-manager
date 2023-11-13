@@ -7,18 +7,22 @@ import java.util.regex.Pattern;
 /**
  * A class to prefix a string with a date format.
  */
-public class DatePrefix {
+public class TimeStampPrefix {
+    private static final String DEFAULT_TIMESTAMP_FORMAT = "yyyy-MM-dd'T'HH.mm.ss";
+    private static final String DEFAULT_TIMESTAMP_REGEX = "^\\d{4}-\\d{2}-\\d{2}T\\d{2}\\.\\d{2}\\.\\d{2}(\\.\\d{3})?";
+    private static final String DEFAULT_TIMESTAMP_SEPARATOR = " ";
+
     private final String dateFormat;
     private final String regex;
     private final String separator;
 
     /**
-     * Create a new DatePrefix object.
+     * Create a new TimeStampPrefix object.
      * @param dateFormat - the date format
      * @param regex - the regular expression to check if a string is prefixed with a date
      * @param separator - the separator between the date and the string
      */
-    public DatePrefix(String dateFormat, String regex, String separator) {
+    public TimeStampPrefix(String dateFormat, String regex, String separator) {
         this.dateFormat = dateFormat;
         this.regex = regex;
         this.separator = separator;
@@ -34,16 +38,16 @@ public class DatePrefix {
      * @param s - the prefixed string
      * @return the date
      */
-    public Date getPrefixedDate(String s) {
-        String[] split = s.split(separator);
-        String dateTimePrefix = split[0];
-        SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
-        try {
-            return sdf.parse(dateTimePrefix);
-        } catch (Exception e) {
-            return null;
-        }
-    }
+//    public LocalDate getPrefixedDate(String s) {
+//        String[] split = s.split(separator);
+//        String dateTimePrefix = split[0];
+//        SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
+//        try {
+//            return sdf.parse(dateTimePrefix);
+//        } catch (Exception e) {
+//            return null;
+//        }
+//    }
 
     /**
      * Prefix a string with a date format.
