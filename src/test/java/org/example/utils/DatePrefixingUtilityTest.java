@@ -11,7 +11,6 @@ public class DatePrefixingUtilityTest {
     @Test
     void testIsStringValidFormat() {
         DatePrefixingUtility utility = new DatePrefixingUtility("yyyy-MM-dd");
-
         assertTrue(utility.isStringValidFormat("2023-11-11"));
         assertFalse(utility.isStringValidFormat("abc2023-11-11"));
         assertFalse(utility.isStringValidFormat("2023/11/11abc"));
@@ -31,9 +30,7 @@ public class DatePrefixingUtilityTest {
     void testGetPrefixedLocalDate() {
         DatePrefixingUtility utility = new DatePrefixingUtility("yyyy-MM-dd");
         LocalDate expectedDate = LocalDate.of(2023, 11, 11);
-        LocalDate parsedDate = utility.getPrefixedLocalDate("2023-11-11abc");
-//        LocalDateTime parsedDateTime = LocalDateTime.from(utility.parse("2023-11-11 12:34:56"));
-
+        LocalDate parsedDate = utility.getPrefixedTemporal("2023-11-11abc");
         assertEquals(expectedDate, parsedDate);
     }
 
@@ -42,8 +39,7 @@ public class DatePrefixingUtilityTest {
         DatePrefixingUtility utility = new DatePrefixingUtility("yyyy-MM-dd");
         LocalDate localDate = LocalDate.of(2023, 11, 11);
         String expectedResult = "2023-11-11abc";
-        String prefixedString = utility.prefixStringWithLocalDate("abc", localDate);
-
+        String prefixedString = utility.prefixStringWithTemporal("abc", localDate);
         assertEquals(expectedResult, prefixedString);
     }
 }
