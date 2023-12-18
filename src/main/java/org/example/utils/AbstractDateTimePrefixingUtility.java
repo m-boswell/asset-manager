@@ -4,9 +4,14 @@ import java.time.temporal.TemporalAccessor;
 
 public abstract class AbstractDateTimePrefixingUtility<T extends TemporalAccessor> {
     private final AbstractDateTimeUtility<T> dateTimeUtility;
-
+    private int expectedFormatLength;
     public AbstractDateTimePrefixingUtility(String dateFormat, Class<T> temporalType) {
         this.dateTimeUtility = AbstractDateTimeUtility.createTemporalUtility(dateFormat, temporalType);
+    }
+
+    public AbstractDateTimePrefixingUtility(String dateFormat, Class<T> temporalType, int expectedFormatLength) {
+        this.dateTimeUtility = AbstractDateTimeUtility.createTemporalUtility(dateFormat, temporalType);
+        this.expectedFormatLength = expectedFormatLength;
     }
 
     public boolean isStringValidFormat(String s) {
@@ -35,9 +40,14 @@ public abstract class AbstractDateTimePrefixingUtility<T extends TemporalAccesso
     }
 
     private String getMaybeStringDate(String s) {
-        int patternLength = dateTimeUtility.getPattern().length();
+        int patternLength;
+        if (expectedFormatLength > 0 ) {
+            patternLength = expectedFormatLength;
+        } else {
+            patternLength = dateTimeUtility.getPattern().length();
+        }
         try {
-            return s.substring(0, patternLength - 2);
+            return s.substring(0, patternLength);
         } catch (StringIndexOutOfBoundsException e) {
             return null;
         }

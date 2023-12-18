@@ -6,4 +6,7 @@ public class DateTimePrefixingUtility extends AbstractDateTimePrefixingUtility<L
     public DateTimePrefixingUtility(String dateFormat) {
         super(dateFormat, LocalDateTime.class);
     }
+    public DateTimePrefixingUtility(String dateFormat, int expectedFormatLength) {
+        super(dateFormat, LocalDateTime.class, expectedFormatLength);
+    }
 }
