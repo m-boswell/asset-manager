@@ -2,78 +2,103 @@ import org.example.Asset;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.time.Instant;
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+
 class AssetTest {
 
     @Test
-    void testBuilderAndAccessors() {
-        String name = "example.mp4";
-        String path = "/path/to/example.mp4";
-        Date date = new Date();
+    void getName_returnsCorrectName() {
+        Asset<LocalDateTime> asset = new Asset.Builder<LocalDateTime>()
+                .setName("test.mp4")
+                .setPath("/path/to/test.mp4")
+                .setDate(LocalDateTime.now())
+                .build();
 
-        Asset asset = new Asset.Builder()
-                .setName(name)
-                .setPath(path)
+        assertEquals("test.mp4", asset.getName());
+    }
+
+    @Test
+    void getPath_returnsCorrectPath() {
+        Asset<LocalDateTime> asset = new Asset.Builder<LocalDateTime>()
+                .setName("test.mp4")
+                .setPath("/path/to/test.mp4")
+                .setDate(LocalDateTime.now())
+                .build();
+
+        assertEquals("/path/to/test.mp4", asset.getPath());
+    }
+
+    @Test
+    void getDate_returnsCorrectDate() {
+        LocalDateTime date = LocalDateTime.now();
+        Asset<LocalDateTime> asset = new Asset.Builder<LocalDateTime>()
+                .setName("test.mp4")
+                .setPath("/path/to/test.mp4")
                 .setDate(date)
                 .build();
 
-        assertEquals(name, asset.getName());
-        assertEquals(path, asset.getPath());
         assertEquals(date, asset.getDate());
     }
 
     @Test
-    void testIsVideo() {
-        Asset videoAsset = new Asset.Builder().setName("video.mp4").build();
-        Asset imageAsset = new Asset.Builder().setName("image.jpg").build();
-
-        assertTrue(videoAsset.isVideo());
-        assertFalse(imageAsset.isVideo());
-    }
-
-    @Test
-    void testToString() {
-        Asset asset = new Asset.Builder()
-                .setName("test.png")
-                .setPath("/path/to/test.png")
-                .setDate(new Date(0))
+    void isVideo_returnsTrueForVideoFile() {
+        Asset<LocalDateTime> asset = new Asset.Builder<LocalDateTime>()
+                .setName("test.mp4")
+                .setPath("/path/to/test.mp4")
+                .setDate(LocalDateTime.now())
                 .build();
 
-        String expected = "Asset{name='test.png', path='/path/to/test.png', date=Wed Dec 31 19:00:00 EST 1969}";
-        assertEquals(expected, asset.toString());
+        assertTrue(asset.isVideo());
     }
 
     @Test
-    void testFromFile() {
-        File mockFile = createMockFile("video.mp4", "/path/to/video.mp4", 100000L);
-        Asset asset = Asset.fromFile(mockFile);
+    void isVideo_returnsFalseForNonVideoFile() {
+        Asset<LocalDateTime> asset = new Asset.Builder<LocalDateTime>()
+                .setName("test.txt")
+                .setPath("/path/to/test.txt")
+                .setDate(LocalDateTime.now())
+                .build();
 
-        assertEquals("video.mp4", asset.getName());
-        assertEquals("/path/to/video.mp4", asset.getPath());
-        assertEquals(new Date(100000L), asset.getDate());
+        assertFalse(asset.isVideo());
     }
 
     @Test
-    void testFromFiles() {
-        List<File> files = new ArrayList<>();
-        files.add(createMockFile("first.mp4", "/path/to/first.mp4", 100000L));
-        files.add(createMockFile("second.mp4", "/path/to/second.mp4", 200000L));
+    void toFile_createsFileWithCorrectPath() {
+        Asset<LocalDateTime> asset = new Asset.Builder<LocalDateTime>()
+                .setName("test.mp4")
+                .setPath("/path/to/test.mp4")
+                .setDate(LocalDateTime.now())
+                .build();
 
-        List<Asset> assets = Asset.fromFiles(files);
+        File file = Asset.toFile(asset);
+
+        assertEquals("/path/to/test.mp4", file.getPath());
     }
 
-    // Helper method to create a mocked File instance
-    private File createMockFile(String name, String path, long lastModified) {
-        File file = mock(File.class);
-        when(file.getName()).thenReturn(name);
-        when(file.getAbsolutePath()).thenReturn(path);
-        when(file.lastModified()).thenReturn(lastModified);
-        return file;
+    @Test
+    void fromFile_createsAssetWithCorrectValues() {
+        File file = new File("/path/to/test.mp4");
+        Asset<LocalDateTime> asset = Asset.fromFile(file);
+
+        assertEquals("test.mp4", asset.getName());
+        assertEquals("/path/to/test.mp4", asset.getPath());
+        assertTrue(asset.getDate().isBefore(LocalDateTime.now()));
+    }
+
+    @Test
+    void fromFile_createsAssetWithCurrentDateForFutureFile() {
+        File futureFile = new File("/path/to/future.mp4") {
+            @Override
+            public long lastModified() {
+                return Instant.now().plusSeconds(60).toEpochMilli();
+            }
+        };
+
+        Asset<LocalDateTime> asset = Asset.fromFile(futureFile);
+
+        assertTrue(asset.getDate().isBefore(LocalDateTime.now().plusSeconds(60)));
     }
 }

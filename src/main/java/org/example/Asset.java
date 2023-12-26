@@ -1,39 +1,74 @@
 package org.example;
 
 import java.io.File;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.temporal.Temporal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-public class Asset {
+/**
+ * This class represents an Asset with a name, path and date.
+ * The date is of a generic type T that extends Temporal.
+ */
+public class Asset<T extends Temporal>  {
     private final String name;
     private final String path;
-    private final Date date;
+    private final T date;
 
-    // Private constructor
-    private Asset(Builder builder) {
+    /**
+     * Private constructor for Asset.
+     *
+     * @param builder the Builder object used to construct this Asset
+     */
+    private Asset(Builder<T> builder) {
         this.name = builder.name;
         this.path = builder.path;
         this.date = builder.date;
     }
 
-    // Getters
+    /**
+     * Getter for name.
+     *
+     * @return the name of the Asset
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Getter for path.
+     *
+     * @return the path of the Asset
+     */
     public String getPath() {
         return path;
     }
 
-    public Date getDate() {
+    /**
+     * Getter for date.
+     *
+     * @return the date of the Asset
+     */
+    public T getDate() {
         return date;
     }
 
+    /**
+     * Checks if the Asset is a video.
+     *
+     * @return true if the Asset is a video, false otherwise
+     */
     public boolean isVideo() {
         return this.name.endsWith(".mp4");
     }
 
+    /**
+     * Returns a string representation of the Asset.
+     *
+     * @return a string representation of the Asset
+     */
     @Override
     public String toString() {
         return "Asset{" +
@@ -43,52 +78,91 @@ public class Asset {
                 '}';
     }
 
-    // Static Builder class
-    public static class Builder {
+    /**
+     * Static Builder class for Asset.
+     */
+    public static class Builder<T extends Temporal> {
         private String name;
         private String path;
-        private Date date;
+        private T date;
 
-        public Builder setName(String name) {
+        /**
+         * Setter for name.
+         *
+         * @param name the name to set
+         * @return the Builder instance
+         */
+        public Builder<T> setName(String name) {
             this.name = name;
             return this;
         }
 
-        public Builder setPath(String path) {
+        /**
+         * Setter for path.
+         *
+         * @param path the path to set
+         * @return the Builder instance
+         */
+        public Builder<T> setPath(String path) {
             this.path = path;
             return this;
         }
 
-        public Builder setDate(Date date) {
+        /**
+         * Setter for date.
+         *
+         * @param date the date to set
+         * @return the Builder instance
+         */
+        public Builder<T> setDate(T date) {
             this.date = date;
             return this;
         }
 
-        public Asset build() {
-            return new Asset(this);
+        /**
+         * Builds an Asset instance.
+         *
+         * @return the built Asset instance
+         */
+        public Asset<T> build() {
+            return new Asset<>(this);
         }
     }
 
-    public static File toFile(Asset asset) {
+    /**
+     * Converts an Asset to a File.
+     *
+     * @param asset the Asset to convert
+     * @return the converted File
+     */
+    public static File toFile(Asset<LocalDateTime> asset) {
         return new File(asset.getPath());
     }
 
-    // Static helper function to create Asset from File
-    public static Asset fromFile(File file) {
-        return new Builder()
+    /**
+     * Creates an Asset from a File.
+     *
+     * @param file the File to convert
+     * @return the created Asset
+     */
+    public static Asset<LocalDateTime> fromFile(File file) {
+        LocalDateTime date = LocalDateTime.ofInstant(Instant.ofEpochMilli(file.lastModified()), ZoneId.systemDefault());
+        return new Builder<LocalDateTime>()
                 .setName(file.getName())
                 .setPath(file.getAbsolutePath())
-                .setDate(new Date(file.lastModified()))
+                .setDate(date)
                 .build();
     }
 
     /**
-     * Static helper function to create a list of Assets from a list of Files
-     * @param files - the list of files
-     * @return a list of assets
+     * Creates a list of Assets from a list of Files.
+     *
+     * @param files the list of Files to convert
+     * @param date the date to set for each Asset
+     * @return the list of created Assets
      */
-    public static List<Asset> fromFiles(List<File> files) {
-        List<Asset> assets = new ArrayList<>();
+    public static List<Asset<LocalDateTime>> fromFiles(List<File> files) {
+        List<Asset<LocalDateTime>> assets = new ArrayList<>();
         for (File file : files) {
             assets.add(Asset.fromFile(file));
         }
