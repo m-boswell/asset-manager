@@ -1,4 +1,4 @@
-package org.example.utils.datetime;
+package org.example.timestamp;
 
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;

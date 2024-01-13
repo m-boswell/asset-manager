@@ -1,4 +1,4 @@
-package org.example.utils.datetime;
+package org.example.timestamp;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

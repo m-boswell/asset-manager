@@ -1,4 +1,4 @@
-package org.example.utils.datetime;
+package org.example.timestamp;
 
 public class Constants {
     public static final String TIMESTAMP_REGEX = "(\\d{4}-\\d{2}-\\d{2}T\\d{2}\\:\\d{2}\\:\\d{2})";

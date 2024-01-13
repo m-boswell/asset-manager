@@ -1,5 +1,6 @@
-package org.example.utils.datetime;
+package org.example.timestamp;
 
+import org.example.timestamp.TimestampRegexChecker;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

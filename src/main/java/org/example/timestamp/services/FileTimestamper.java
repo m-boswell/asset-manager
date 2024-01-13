@@ -1,6 +1,6 @@
-package org.example.services;
+package org.example.timestamp.services;
 
-import org.example.utils.datetime.TimestampPrefixer;
+import org.example.timestamp.TimestampPrefixer;
 
 import java.io.File;
 import java.time.Instant;
