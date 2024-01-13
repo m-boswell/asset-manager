@@ -61,13 +61,12 @@ public class TimestampPrefixer {
      * @return a new TimestampPrefixer of the specified type, or null if the type is not recognized
      */
     public static TimestampPrefixer createTimestampPrefixer(String type) {
-        if (type.equals("LocalDate")) {
+        if (type.equals(Constants.DATESTAMP_TYPE)) {
             return new TimestampPrefixer(DateTimeFormatter.ofPattern(Constants.DATE_PREFIX_FORMAT), new TimestampRegexChecker(Constants.DATE_PREFIX_REGEX));
-        } else if (type.equals("LocalDateTime")) {
+        } else if (type.equals(Constants.TIMESTAMP_TYPE)) {
             return new TimestampPrefixer(DateTimeFormatter.ofPattern(Constants.TIMESTAMP_PREFIX_FORMAT), new TimestampRegexChecker(Constants.TIMESTAMP_PREFIX_REGEX));
-        } else {
-            return null;
         }
+        throw new IllegalArgumentException("Invalid TimestampPrefixer type: " + type);
     }
 
 }

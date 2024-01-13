@@ -1,6 +1,5 @@
 package org.example.timestamp;
 
-import org.example.timestamp.TimestampPrefixer;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -44,9 +43,10 @@ public class TimestampPrefixerTest {
     }
 
     @Test
-    void createTimestampPrefixer_returnsNull_whenTypeIsInvalid() {
-        TimestampPrefixer prefixer = TimestampPrefixer.createTimestampPrefixer("InvalidType");
-        assertNull(prefixer);
+    void createTimestampPrefixer_throwsIllegalArgumentException_whenTypeIsInvalid() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            TimestampPrefixer.createTimestampPrefixer("InvalidType");
+        });
     }
 
 }
