@@ -1,4 +1,4 @@
-package org.example;
+package org.example.asset;
 
 import java.io.File;
 import java.time.Instant;
@@ -130,22 +130,15 @@ public class Asset<T extends Temporal>  {
     }
 
     /**
-     * Converts an Asset to a File.
-     *
-     * @param asset the Asset to convert
-     * @return the converted File
-     */
-    public static File toFile(Asset<LocalDateTime> asset) {
-        return new File(asset.getPath());
-    }
-
-    /**
      * Creates an Asset from a File.
      *
      * @param file the File to convert
      * @return the created Asset
      */
     public static Asset<LocalDateTime> fromFile(File file) {
+        if (!file.exists()) {
+            throw new IllegalArgumentException("File does not exist at " + file.getAbsolutePath());
+        }
         LocalDateTime date = LocalDateTime.ofInstant(Instant.ofEpochMilli(file.lastModified()), ZoneId.systemDefault());
         return new Builder<LocalDateTime>()
                 .setName(file.getName())
@@ -158,7 +151,6 @@ public class Asset<T extends Temporal>  {
      * Creates a list of Assets from a list of Files.
      *
      * @param files the list of Files to convert
-     * @param date the date to set for each Asset
      * @return the list of created Assets
      */
     public static List<Asset<LocalDateTime>> fromFiles(List<File> files) {

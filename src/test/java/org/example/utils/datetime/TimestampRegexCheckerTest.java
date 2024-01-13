@@ -39,7 +39,7 @@ public class TimestampRegexCheckerTest {
     @Test
     void getTimeStampPattern_returnsPattern_whenPatternMatches() {
         TimestampRegexChecker checker = new TimestampRegexChecker("(\\d{4}-\\d{2}-\\d{2}T\\d{2}\\:\\d{2}\\:\\d{2})");
-        assertEquals("2023-11-11T10.15.30", checker.getTimeStamp("2023-11-11T10:15:30abc"));
+        assertEquals("2023-11-11T10:15:30", checker.getTimeStamp("2023-11-11T10:15:30abc"));
     }
 
     @Test

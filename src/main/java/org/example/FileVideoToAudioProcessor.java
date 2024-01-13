@@ -1,5 +1,7 @@
 package org.example;
 
+import org.example.asset.Asset;
+
 import java.io.IOException;
 
 public class FileVideoToAudioProcessor {

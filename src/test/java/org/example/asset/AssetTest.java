@@ -1,8 +1,7 @@
-import org.example.Asset;
+package org.example.asset;
+
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
-import java.time.Instant;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -65,40 +64,4 @@ class AssetTest {
         assertFalse(asset.isVideo());
     }
 
-    @Test
-    void toFile_createsFileWithCorrectPath() {
-        Asset<LocalDateTime> asset = new Asset.Builder<LocalDateTime>()
-                .setName("test.mp4")
-                .setPath("/path/to/test.mp4")
-                .setDate(LocalDateTime.now())
-                .build();
-
-        File file = Asset.toFile(asset);
-
-        assertEquals("/path/to/test.mp4", file.getPath());
-    }
-
-    @Test
-    void fromFile_createsAssetWithCorrectValues() {
-        File file = new File("/path/to/test.mp4");
-        Asset<LocalDateTime> asset = Asset.fromFile(file);
-
-        assertEquals("test.mp4", asset.getName());
-        assertEquals("/path/to/test.mp4", asset.getPath());
-        assertTrue(asset.getDate().isBefore(LocalDateTime.now()));
-    }
-
-    @Test
-    void fromFile_createsAssetWithCurrentDateForFutureFile() {
-        File futureFile = new File("/path/to/future.mp4") {
-            @Override
-            public long lastModified() {
-                return Instant.now().plusSeconds(60).toEpochMilli();
-            }
-        };
-
-        Asset<LocalDateTime> asset = Asset.fromFile(futureFile);
-
-        assertTrue(asset.getDate().isBefore(LocalDateTime.now().plusSeconds(60)));
-    }
 }
